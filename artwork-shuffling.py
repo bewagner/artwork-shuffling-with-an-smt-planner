@@ -38,6 +38,13 @@ if __name__ == "__main__":
 
         solver.add(first_variable != second_variable)
 
+        if (
+            first_artwork.end_room == second_artwork.start_room
+            and second_artwork.end_room == first_artwork.start_room
+        ):
+            print("There is no valid solution for this list of artworks")
+            exit(1)
+
         if first_artwork.end_room == second_artwork.start_room:
             solver.add(second_variable < first_variable)
 
@@ -52,8 +59,10 @@ if __name__ == "__main__":
     indices = [
         model.evaluate(index_variables[artwork.name]).as_long() for artwork in artworks
     ]
-    print(indices)
-    print(solver)
-    result = [artworks[i] for i in indices]
+
+    result = [None] * len(artworks)
+
+    for artwork, index in zip(artworks, indices):
+        result[index] = artwork
 
     print(result)
